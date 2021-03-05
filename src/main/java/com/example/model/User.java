@@ -1,9 +1,18 @@
-package com.example;
+package com.example.model;
 
 public class User {
     private String name;
     private boolean premium;
     private int age;
+
+    public User() {
+    }
+
+    public User(String name, boolean premium, int age) {
+        this.name = name;
+        this.premium = premium;
+        this.age = age;
+    }
 
     public String getName() {
         return name;

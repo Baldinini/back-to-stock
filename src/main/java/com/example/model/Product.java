@@ -1,4 +1,4 @@
-package com.example;
+package com.example.model;
 
 public class Product {
 
@@ -18,4 +18,11 @@ public class Product {
         return category;
     }
 
+    @Override
+    public String toString() {
+        return "Product{"
+                + "id = '" + id + '\''
+                + ", category = " + category
+                + '}';
+    }
 }
