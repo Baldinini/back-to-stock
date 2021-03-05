@@ -11,10 +11,9 @@ import java.util.stream.Collectors;
 
 public class BackToStockServiceImpl implements BackToStockService {
     private final Map<Product, List<User>> subscribers = new HashMap<>();
-    private final UsersComparator usersComparator;
+    private final UsersComparator usersComparator = new UsersComparator();
 
-    public BackToStockServiceImpl(UsersComparator usersComparator, Product... products) {
-        this.usersComparator = usersComparator;
+    public BackToStockServiceImpl(Product... products) {
         for (Product product : products) {
             this.subscribers.put(product, new ArrayList<>());
         }
@@ -23,14 +22,20 @@ public class BackToStockServiceImpl implements BackToStockService {
     @Override
     public void subscribe(User user, Product product) {
         List<User> users = subscribers.get(product);
+        if (user == null) {
+            throw new RuntimeException("Can't subscribe null user");
+        }
         users.add(user);
     }
 
     @Override
     public List<User> subscribedUsers(Product product) {
-        return subscribers.get(product)
-                .stream()
-                .sorted(usersComparator.getCustomComparatorForSpecialProduct(product))
-                .collect(Collectors.toList());
+        if (subscribers.containsKey(product)) {
+            return subscribers.get(product)
+                    .stream()
+                    .sorted(usersComparator.getCustomComparatorForSpecialProduct(product))
+                    .collect(Collectors.toList());
+        }
+        throw new RuntimeException("Can't get list of subscribed users by this product: " + product);
     }
 }

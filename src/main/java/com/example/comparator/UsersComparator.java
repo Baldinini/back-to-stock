@@ -11,9 +11,13 @@ public class UsersComparator {
     private final Map<ProductCategory, Comparator<User>> customComparatorForSpecialProduct =
             new HashMap<>();
 
-    public void setCustomComparatorForSpecialProduct(Product product,
-                                                     Comparator<User> userComparator) {
-        this.customComparatorForSpecialProduct.put(product.getCategory(), userComparator);
+    public UsersComparator() {
+        UsersAgePremiumComparator agePremiumComparator = new UsersAgePremiumComparator();
+        Comparator<User> comparator = new UsersPremiumComparator()
+                .thenComparing(new UsersMediumPremiumComparator());
+        customComparatorForSpecialProduct.put(ProductCategory.MEDICAL, agePremiumComparator);
+        customComparatorForSpecialProduct.put(ProductCategory.BOOKS, comparator);
+        customComparatorForSpecialProduct.put(ProductCategory.DIGITAL, comparator);
     }
 
     public Comparator<User> getCustomComparatorForSpecialProduct(Product product) {
